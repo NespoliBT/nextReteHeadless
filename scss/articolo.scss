@@ -1,0 +1,28 @@
+@import "./partials/variables";
+@import "./partials/mixins";
+
+.container {
+    @include container(1440px, 32px);
+    padding-top: 50px;
+}
+
+.date {
+    font-size: 1.5em;
+    font-weight: 300;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+.title {
+    @include title;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.content {
+    font-size: 24px;
+
+    p {
+        margin-bottom: 20px;
+    }
+}

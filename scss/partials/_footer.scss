@@ -1,0 +1,14 @@
+@import "./variables";
+
+footer {
+  background: $black;
+  color: $white;
+  margin-top: 50px;
+
+  .title {
+    @include title;
+    text-align: center;
+    margin: 0 auto;
+    padding: 30px 0;
+  }
+}

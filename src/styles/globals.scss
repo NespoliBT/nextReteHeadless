@@ -1,0 +1,33 @@
+@import "./variables";
+@import "./mixins";
+@import "./animations";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  color: inherit;
+  text-decoration: none;
+}
+
+body {
+  font-size: 1em;
+  line-height: 1.5;
+  background: $white;
+  background-size: 500px;
+  background-repeat: repeat;
+  font-family: "Josefin Slab";
+  font-weight: 600;
+}
+
+.title {
+  @include title;
+  @include container(100%, 32px)
+}
+
+a {
+  color: $red;
+  cursor: pointer;
+}

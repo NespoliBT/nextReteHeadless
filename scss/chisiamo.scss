@@ -1,0 +1,15 @@
+@import "./partials/variables";
+@import "./partials/mixins";
+
+.container {
+    @include container(1440px, 32px);
+    padding-top: 50px;
+}
+
+.content {
+    font-size: 24px;
+
+    p {
+        margin-bottom: 20px;
+    }
+}

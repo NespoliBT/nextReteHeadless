@@ -1,0 +1,87 @@
+@import "./partials/variables";
+@import "./partials/mixins";
+
+
+.container {
+    @include container(1440px, 32px);
+    padding-top: 50px;
+}
+
+.title {
+    @include title;
+}
+
+.filters {
+    margin: 32px;
+
+    .filterYear {
+        position: relative;
+        display: flex;
+
+        #filterName,
+        .years .year {
+            padding: 8px 32px;
+            border: 2px solid $red;
+            border-radius: 100px;
+            cursor: pointer;
+            background-color: $white;
+            box-shadow: 0 0 20px -10px $black;
+            user-select: none;
+            font-weight: 500;
+        }
+
+        .years {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            z-index: 2;
+            top: 60px;
+
+            .year {
+                animation: filterShow 0.2s ease-in-out;
+                display: none;
+                margin: 4px 0;
+
+                &.open {
+                    display: flex;
+                }
+
+                &.selected {
+                    background-color: $red;
+                    color: $white;
+                }
+            }
+        }
+    }
+}
+
+.articoli {
+    @include container(1440px, 32px);
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 30px 0;
+
+    a {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex: 1 1;
+        min-width: 325px;
+        color: $black;
+        border: none;
+
+        &.show {
+            display: flex;
+        }
+
+        @media screen and (max-width: 768px) {
+            min-width: unset;
+        }
+
+        .articolo {
+            @include articolo;
+        }
+    }
+}

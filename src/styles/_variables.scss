@@ -1,0 +1,15 @@
+@import "./fonts";
+
+$white: #eeeeee;
+$black: #111111;
+$black_alt: #423c3d;
+$gray: #e0e0e0;
+$red: #ce231e;
+
+$mobile-threshold: 768px;
+$small-screen-threshold: 1024px;
+$progressbar_color: #0070f3;
+
+:export {
+  progressbarColor: $progressbar_color;
+}

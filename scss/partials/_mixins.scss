@@ -1,0 +1,126 @@
+@mixin title {
+  font-size: 3em;
+  text-align: left;
+  margin-top: 60px;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+@mixin subtitle {
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+@mixin container($width, $margin) {
+  width: $width;
+  max-width: calc(100% - #{$margin});
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@mixin slide {
+  transition: 0.2s;
+  padding: 24px 64px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  position: relative;
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
+  color: $white;
+  font-size: 64px;
+  text-shadow: 0 0 10px $black;
+
+  .card-title {
+    z-index: 1;
+
+  }
+
+  @media screen and (max-width: $small-screen-threshold) {
+    font-size: 48px;
+  }
+
+  @media screen and (max-width: $mobile-threshold) {
+    font-size: 32px;
+    padding: 24px;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #00000050;
+    backdrop-filter: blur(2px);
+    box-shadow: inset 0 0 0 0 $black;
+  }
+}
+
+@mixin articolo {
+  transition: 0.2s;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  border: 1px solid $black_alt;
+  grid-template-rows: auto 1fr;
+  padding: 32px;
+  border-radius: 8px;
+  background: white;
+  width: 100%;
+
+  flex: 1 1;
+  min-width: 325px;
+
+  box-shadow: 0 0 8px -4px $black_alt;
+
+  .date {
+    font-size: 1em;
+    font-weight: 300;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    @include subtitle;
+    margin: 0;
+    margin-bottom: 24px;
+  }
+
+  .description {
+    font-size: 1em;
+    overflow: hidden;
+    text-align: justify;
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: #df5e5e;
+    width: max-content;
+    height: max-content;
+    border-radius: 50px;
+    border: 2px solid $red;
+    padding: 5px 20px;
+    margin-top: 24px;
+
+    &:hover {
+      span {
+        transform: translateX(5px);
+      }
+    }
+
+    span {
+      transition: .2s;
+      font-family: NerdFonts;
+      font-size: 2em;
+      margin-left: 10px;
+      line-height: 10px;
+    }
+  }
+}
