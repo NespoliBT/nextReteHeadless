@@ -25,7 +25,7 @@ const PostCard = ({ post, options = {} }) => {
     metadata.categories = categories;
   }
 
-  let postCardStyle = styles.postCard;
+  let postCardStyle = styles.articolo;
 
   if (isSticky) {
     postCardStyle = `${postCardStyle} ${styles.postCardSticky}`;
@@ -34,17 +34,12 @@ const PostCard = ({ post, options = {} }) => {
   return (
     <div className={postCardStyle}>
       {isSticky && <FaMapPin aria-label="Sticky Post" />}
-      <Link href={postPathBySlug(slug)}>
-        <a>
-          <h3
-            className={styles.postCardTitle}
-            dangerouslySetInnerHTML={{
-              __html: title,
-            }}
-          />
-        </a>
-      </Link>
-      <Metadata className={styles.postCardMetadata} {...metadata} />
+      <h3
+        className={styles.subtitle}
+        dangerouslySetInnerHTML={{
+          __html: title,
+        }}
+      />
       {excerpt && (
         <div
           className={styles.postCardContent}
@@ -53,6 +48,14 @@ const PostCard = ({ post, options = {} }) => {
           }}
         />
       )}
+      <Link href={postPathBySlug(slug)}>
+        <a>
+          <div className={styles.cta}>
+            Leggi di più
+            <span></span>
+          </div>
+        </a>
+      </Link>
     </div>
   );
 };

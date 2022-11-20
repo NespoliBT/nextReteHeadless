@@ -1,4 +1,5 @@
 @import "styles/variables";
+@import "styles/animations";
 
 .header {
   display: flex;
@@ -42,6 +43,8 @@
   nav.menu {
     color: $black;
     font-size: 1em;
+    display: flex;
+    align-items: center;
 
     ul {
       display: flex;
@@ -94,13 +97,57 @@
       }
     }
 
+    .navSearch {
+      margin: 0 24px;
+      position: relative;
+
+      button {
+        color: $red;
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      form {
+        position: absolute;
+        right: -12px;
+        top: 50px;
+        border: 2px solid $red;
+        background: $white;
+        padding: 24px;
+
+        input {
+          width: 300px;
+          padding: 12px;
+          font-size: 24px;
+          border: none;
+          border-bottom: 2px solid $red;
+          outline: none;
+          background: $white;
+        }
+
+        ul {
+          margin-top: 24px;
+
+          li {
+            font-size: 20px;
+            width: 100%;
+            border-bottom: 1px dashed $red;
+
+            &:last-child {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+    }
+
     @media screen and (max-width: $mobile-threshold) {
       display: none;
     }
   }
 
   nav.mobileMenu {
-    display: none;
+    display: flex;
     position: fixed;
     top: 0px;
     left: 0px;
@@ -112,16 +159,8 @@
     justify-content: center;
     align-items: flex-start;
     padding-top: 165px;
-
-    &.open {
-      display: flex;
-      animation: mobileMenuShow 0.3s ease-in-out;
-    }
-
-    &.closing {
-      animation: mobileMenuClose 0.3s ease-in-out;
-      transform: translateX(100%);
-    }
+    animation: mobileMenuShow 0.3s ease-in-out;
+    transition: .3s ease-in-out;
 
     .mobileMenuCloseButton {
       font-family: NerdFonts;
@@ -173,5 +212,9 @@
         }
       }
     }
+  }
+
+  nav.mobileMenu.closing {
+    transform: translateX(100%);
   }
 }

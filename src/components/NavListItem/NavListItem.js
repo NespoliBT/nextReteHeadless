@@ -7,8 +7,6 @@ const NavListItem = ({ className, item }) => {
     return <NavListItem key={item.id} item={item} />;
   });
 
-  console.log(className, item);
-
   return (
     <li key={item.id} className={className}>
       <Link href={item.path}>

@@ -1,0 +1,21 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.container {
+    @include container(1440px, 32px);
+}
+
+.title {
+    @include subtitle;
+    margin-top: 60px;
+    @include container(1440px, 32px);
+}
+
+.posts {
+    @include container(1440px, 32px);
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 30px 0;
+}

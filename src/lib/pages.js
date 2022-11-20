@@ -124,6 +124,7 @@ export async function getAllPages(options = {}) {
 
   const pages = data?.data.pages.edges.map(({ node = {} }) => node).map(mapPageData);
 
+
   return {
     pages,
   };

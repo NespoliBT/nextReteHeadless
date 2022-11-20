@@ -7,23 +7,24 @@ import useSearch, { SEARCH_STATE_LOADED } from 'hooks/use-search';
 import { postPathBySlug } from 'lib/posts';
 import { findMenuByLocation, MENU_LOCATION_NAVIGATION_DEFAULT } from 'lib/menus';
 
-import Section from 'components/Section';
-
 import styles from './Nav.module.scss';
 import NavListItem from 'components/NavListItem';
 
-const SEARCH_VISIBLE = 'visible';
-const SEARCH_HIDDEN = 'hidden';
-
 const Nav = () => {
   const formRef = useRef();
+  const headerRef = useRef();
 
-  const [searchVisibility, setSearchVisibility] = useState(SEARCH_HIDDEN);
+  const [searchVisibility, setSearchVisibility] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuClosing, setMobileMenuClosing] = useState(false);
+
+  const [headerHeight, setHeaderHeight] = useState(0);
+  useEffect(() => {
+    setHeaderHeight(headerRef.current.offsetHeight);
+  }, []);
 
   const { metadata = {}, menus } = useSite();
   const { title } = metadata;
-
-  console.log('menus', menus);
 
   const navigationLocation = process.env.WORDPRESS_MENU_LOCATION_NAVIGATION || MENU_LOCATION_NAVIGATION_DEFAULT;
   const navigation = findMenuByLocation(menus, navigationLocation);
@@ -42,9 +43,16 @@ const Nav = () => {
     // If we don't have a query, don't need to bother adding an event listener
     // but run the cleanup in case the previous state instance exists
 
-    if (searchVisibility === SEARCH_HIDDEN) {
+    console.log('searchVisibility', searchVisibility);
+
+    if (searchVisibility === false) {
       removeDocumentOnClick();
       return;
+    } else {
+      console.log(formRef);
+      const searchInput = Array.from(formRef.current.elements).find((input) => input.type === 'text');
+
+      searchInput.focus();
     }
 
     addDocumentOnClick();
@@ -53,9 +61,6 @@ const Nav = () => {
     // When the search box opens up, additionall find the search input and focus
     // on the element so someone can start typing right away
 
-    const searchInput = Array.from(formRef.current.elements).find((input) => input.type === 'search');
-
-    searchInput.focus();
 
     return () => {
       removeResultsRoving();
@@ -86,7 +91,7 @@ const Nav = () => {
 
   function handleOnDocumentClick(e) {
     if (!e.composedPath().includes(formRef.current)) {
-      setSearchVisibility(SEARCH_HIDDEN);
+      setSearchVisibility(false);
       clearSearch();
     }
   }
@@ -106,7 +111,7 @@ const Nav = () => {
    */
 
   function handleOnToggleSearch() {
-    setSearchVisibility(SEARCH_VISIBLE);
+    setSearchVisibility(!searchVisibility);
   }
 
   /**
@@ -162,7 +167,7 @@ const Nav = () => {
   const escFunction = useCallback((event) => {
     if (event.keyCode === 27) {
       clearSearch();
-      setSearchVisibility(SEARCH_HIDDEN);
+      setSearchVisibility(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -176,78 +181,92 @@ const Nav = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const openMobileMenu = () => {
+    setMobileMenuOpen(true);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuClosing(true);
+    setTimeout(() => {
+      setMobileMenuOpen(false);
+      setMobileMenuClosing(false);
+    }, 300);
+  };
+
   return (
-    <div className={styles.header}>
-      <div className={styles.logoContainer}>
-        <Link href="/" >
-          <img className={styles.logo} src="/img/logo.png" alt="logo" />
-        </Link>
-      </div>
-      <div className={styles.mobileMenuButton}>
-        
-      </div>
-      <nav className={styles.menu}>
-        <ul>
-          {navigation?.map((listItem) => {
-            return <NavListItem key={listItem.id} item={listItem} className={styles.menuItem} />;
-          })}
-        </ul>
-      </nav>
-      <nav className={styles.mobileMenu}>
-        <div className={styles.mobileMenuCloseButton}></div>
-        <ul>
-          <li>
-            <Link href="/" >
-              <img className={styles.logo} src="/img/logo.png" alt="logo" />
-            </Link>
-          </li>
-          {navigation?.map((listItem) => {
-            return <NavListItem key={listItem.id} item={listItem} className={styles.menuItem} />;
-          })}
-        </ul>
-      </nav>
-      <div className={styles.navSearch}>
-        {searchVisibility === SEARCH_HIDDEN && (
-          <button onClick={handleOnToggleSearch} disabled={!searchIsLoaded}>
-            <span className="sr-only">Toggle Search</span>
-            <FaSearch />
-          </button>
+    <>
+      <div className={styles.header} ref={headerRef}>
+        <div className={styles.logoContainer}>
+          <Link href="/" >
+            <img className={styles.logo} src="/img/logo.png" alt="logo" />
+          </Link>
+        </div>
+        <div className={styles.mobileMenuButton} onClick={openMobileMenu}>
+          
+        </div>
+        <nav className={styles.menu}>
+          <ul>
+            {navigation?.map((listItem) => {
+              return <NavListItem key={listItem.id} item={listItem} className={styles.menuItem} />;
+            })}
+          </ul>
+          <div className={styles.navSearch}>
+            <button onClick={handleOnToggleSearch} disabled={!searchIsLoaded}>
+              <FaSearch />
+            </button>
+            {searchVisibility && (
+              <form ref={formRef} action="/search" data-search-is-active={!!query}>
+                <input
+                  type="text"
+                  name="q"
+                  value={query || ''}
+                  onChange={handleOnSearch}
+                  autoComplete="off"
+                  placeholder="Cerca..."
+                  required
+                />
+                <div className={styles.navSearchResults}>
+                  {results.length > 0 && (
+                    <ul>
+                      {results.map(({ slug, title }, index) => {
+                        return (
+                          <li key={slug}>
+                            <Link tabIndex={index} href={postPathBySlug(slug)}>
+                              <a>{title}</a>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                  {results.length === 0 && query && (
+                    <p>
+                      Nessun risultato per: <strong>{query}</strong>
+                    </p>
+                  )}
+                </div>
+              </form>
+            )}
+          </div>
+        </nav>
+        {mobileMenuOpen && (
+          <nav className={[styles.mobileMenu, mobileMenuClosing && styles.closing].join(' ')}>
+            <div className={styles.mobileMenuCloseButton} onClick={closeMobileMenu}></div>
+            <ul>
+              <li>
+                <Link href="/" >
+                  <img className={styles.logo} src="/img/logo.png" alt="logo" />
+                </Link>
+              </li>
+              {navigation?.map((listItem) => {
+                return <NavListItem key={listItem.id} item={listItem} className={styles.menuItem} />;
+              })}
+            </ul>
+          </nav>
         )}
-        {searchVisibility === SEARCH_VISIBLE && (
-          <form ref={formRef} action="/search" data-search-is-active={!!query}>
-            <input
-              type="search"
-              name="q"
-              value={query || ''}
-              onChange={handleOnSearch}
-              autoComplete="off"
-              placeholder="Search..."
-              required
-            />
-            <div className={styles.navSearchResults}>
-              {results.length > 0 && (
-                <ul>
-                  {results.map(({ slug, title }, index) => {
-                    return (
-                      <li key={slug}>
-                        <Link tabIndex={index} href={postPathBySlug(slug)}>
-                          <a>{title}</a>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-              {results.length === 0 && (
-                <p>
-                  Sorry, not finding anything for <strong>{query}</strong>
-                </p>
-              )}
-            </div>
-          </form>
-        )}
       </div>
-    </div>
+      <div style={{ marginTop: `${headerHeight}px` }} />
+    </>
   );
 };
 

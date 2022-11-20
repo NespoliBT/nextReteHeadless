@@ -15,8 +15,6 @@ export default function Home({ posts, pagination }) {
   const { metadata = {} } = useSite();
   const { title, description } = metadata;
 
-  console.log('posts', posts);
-
   return (
     <Layout>
       <WebsiteJsonLd siteTitle={title} />
@@ -37,7 +35,6 @@ export default function Home({ posts, pagination }) {
 
       <Section>
         <Container>
-          <h2 className="sr-only">Posts</h2>
           <ul className={styles.posts}>
             {posts.map((post) => {
               return (
