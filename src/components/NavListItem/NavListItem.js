@@ -3,9 +3,9 @@
 import Link from 'next/link';
 
 const NavListItem = ({ className, item }) => {
-  const nestedItems = (item.children || []).map((item) => {
-    return <NavListItem key={item.id} item={item} />;
-  });
+  //  const nestedItems = (item.children || []).map((item) => {
+  //    return <NavListItem key={item.id} item={item} />;
+  //  });
 
   return (
     <li key={item.id} className={className}>

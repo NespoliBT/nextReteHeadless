@@ -23,8 +23,7 @@ const Nav = () => {
     setHeaderHeight(headerRef.current.offsetHeight);
   }, []);
 
-  const { metadata = {}, menus } = useSite();
-  const { title } = metadata;
+  const { menus } = useSite();
 
   const navigationLocation = process.env.WORDPRESS_MENU_LOCATION_NAVIGATION || MENU_LOCATION_NAVIGATION_DEFAULT;
   const navigation = findMenuByLocation(menus, navigationLocation);
@@ -60,7 +59,6 @@ const Nav = () => {
 
     // When the search box opens up, additionall find the search input and focus
     // on the element so someone can start typing right away
-
 
     return () => {
       removeResultsRoving();
@@ -197,7 +195,7 @@ const Nav = () => {
     <>
       <div className={styles.header} ref={headerRef}>
         <div className={styles.logoContainer}>
-          <Link href="/" >
+          <Link href="/">
             <img className={styles.logo} src="/img/logo.png" alt="logo" />
           </Link>
         </div>
@@ -251,10 +249,12 @@ const Nav = () => {
         </nav>
         {mobileMenuOpen && (
           <nav className={[styles.mobileMenu, mobileMenuClosing && styles.closing].join(' ')}>
-            <div className={styles.mobileMenuCloseButton} onClick={closeMobileMenu}></div>
+            <div className={styles.mobileMenuCloseButton} onClick={closeMobileMenu}>
+              
+            </div>
             <ul>
               <li>
-                <Link href="/" >
+                <Link href="/">
                   <img className={styles.logo} src="/img/logo.png" alt="logo" />
                 </Link>
               </li>
